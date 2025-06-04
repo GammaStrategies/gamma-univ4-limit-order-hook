@@ -38,7 +38,7 @@ print(pools)
 ```python
 # Get order book for a specific pool
 pool_id = '0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
-invert = False  # Set to True to invert pool's base token and quote token
+invert = False  # Set to True to invert pool's base token and quote token. By default, token0 is base token and token1 is quote token. Determination of token0-token1 ordering is based on alphanumeric order of the token addresses
 window = 0.1    # Applied to pool price to set the portion of the book to get (0.1 = 10%)
 
 book = me.get_book(pool_id, invert, window)
@@ -70,7 +70,7 @@ This will display a matplotlib chart showing:
 ```python
 # Get valid price range for orders
 pool_id = '0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
-invert = False  # To invert pool's base token and quote token
+invert = False  # To invert pool's base token and quote token. By default, token0 is base token and token1 is quote token. Determination of token0-token1 ordering is based on alphanumeric order of the token addresses
 side = 'buy'    # 'buy' or 'sell'
 
 # Get the valid price range for this order type
@@ -92,7 +92,7 @@ Scale orders allow you to place multiple orders across a price range with custom
 ```python
 # Parameters for scale orders
 pool_id = '0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
-invert = False     # To invert pool's base token and quote token
+invert = False     # To invert pool's base token and quote token. By default, token0 is base token and token1 is quote token. Determination of token0-token1 ordering is based on alphanumeric order of the token addresses
 side = 'buy'       # 'buy' or 'sell'
 size = 20          # Total size across all orders
 lower_price = 1000 # Lower bound of price range
