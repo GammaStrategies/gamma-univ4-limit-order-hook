@@ -11,7 +11,8 @@ token_abi='''[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","
 
 #mapping
 mapping={'base':{'rpc_url':'https://mainnet.base.org','manager_address':'0xC7dFb6A0109952f0116413662E1795B44D7BE3c1','lens_address':'0xb9b7e1ad0d1aBba7Cf0Bf23D0Ee1f8a7513e473E','native_token_symbol':'ETH'},
-         'unichain':{'rpc_url':'https://unichain.drpc.org','manager_address':'0x8a79bE4DBde8D6496578721B48eE0fEB71De29ee','lens_address':'0x5c1CBa004BbCA0B328Ebf80e6988F2C6B4892F85','native_token_symbol':'ETH'}}
+         'unichain':{'rpc_url':'https://unichain.drpc.org','manager_address':'0x8a79bE4DBde8D6496578721B48eE0fEB71De29ee','lens_address':'0x5c1CBa004BbCA0B328Ebf80e6988F2C6B4892F85','native_token_symbol':'ETH'},
+         'arbitrum':{'rpc_url':'https://arbitrum.meowrpc.com','manager_address':'0x464eFbA4661cAB5FD10049f34477A2C50E965ae5','lens_address':'0x5C356a819Dc303903EddebAf11090bb97af55383','native_token_symbol':'ETH'}}
 
 class client:
 
