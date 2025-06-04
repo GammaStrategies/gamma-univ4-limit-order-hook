@@ -1,4 +1,4 @@
-# Gamma Books - Python SDK
+# Gamma Limit Order Books - Python SDK
 
 Python SDK for Gamma's Uniswap v4 limit order book smart contract. This SDK allows you to interact with limit order functionality on Base, Unichain, Arbitrum, and other networks that may be added in the future.
 
