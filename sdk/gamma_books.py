@@ -224,8 +224,8 @@ class client:
         else:
 
             #approve
-            current_approval=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
-            if current_approval<size_formatted:
+            approved=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
+            if approved<size_formatted:
                 data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
                 signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
                 hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
@@ -278,8 +278,8 @@ class client:
         else:
 
             #approve
-            current_approval=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
-            if current_approval<size_formatted:
+            approved=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
+            if approved<size_formatted:
                 data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
                 signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
                 hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
