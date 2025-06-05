@@ -2,7 +2,7 @@
 from gamma_books import client
 
 #connect wallet
-network_name='base' #base/unichain
+network_name='base' #base/unichain/arbitrum
 wallet_key='xxx' #your wallet private key
 me=client(network_name,wallet_key)
 
@@ -18,7 +18,7 @@ book=me.get_book(pool_id,invert,window)
 print(book)
 
 #plot book
-cumulative=True
+cumulative=False
 me.plot_book(book,cumulative)
 
 #place order
@@ -27,7 +27,7 @@ invert=False #to invert pool's base token and quote token
 side='buy' #buy/sell
 range=me.get_extreme_prices(pool_id,invert,side) #get order's valid price range
 print(range)
-size=20 #order's size in provided token
+size=15 #order's size in provided token
 price=2000 #order's execution price
 receipt=me.place_order(pool_id,invert,side,size,price)
 

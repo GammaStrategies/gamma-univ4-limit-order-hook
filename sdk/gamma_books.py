@@ -10,9 +10,9 @@ lens_abi='''[{"inputs":[{"internalType":"address","name":"_limitOrderManagerAddr
 token_abi='''[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"guy","type":"address"},{"name":"wad","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wad","type":"uint256"}],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"deposit","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"guy","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Withdrawal","type":"event"}]'''
 
 #mapping
-mapping={'base':{'rpc_url':'https://mainnet.base.org','manager_address':'0xC7dFb6A0109952f0116413662E1795B44D7BE3c1','lens_address':'0xb9b7e1ad0d1aBba7Cf0Bf23D0Ee1f8a7513e473E','native_token_symbol':'ETH'},
+mapping={'base':{'rpc_url':'https://base.drpc.org','manager_address':'0xC7dFb6A0109952f0116413662E1795B44D7BE3c1','lens_address':'0xb9b7e1ad0d1aBba7Cf0Bf23D0Ee1f8a7513e473E','native_token_symbol':'ETH'},
          'unichain':{'rpc_url':'https://unichain.drpc.org','manager_address':'0x8a79bE4DBde8D6496578721B48eE0fEB71De29ee','lens_address':'0x5c1CBa004BbCA0B328Ebf80e6988F2C6B4892F85','native_token_symbol':'ETH'},
-         'arbitrum':{'rpc_url':'https://arbitrum.meowrpc.com','manager_address':'0x464eFbA4661cAB5FD10049f34477A2C50E965ae5','lens_address':'0x5C356a819Dc303903EddebAf11090bb97af55383','native_token_symbol':'ETH'}}
+         'arbitrum':{'rpc_url':'https://arbitrum.drpc.org','manager_address':'0x464eFbA4661cAB5FD10049f34477A2C50E965ae5','lens_address':'0x5C356a819Dc303903EddebAf11090bb97af55383','native_token_symbol':'ETH'}}
 
 class client:
 
@@ -224,10 +224,12 @@ class client:
         else:
 
             #approve
-            data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
-            signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
-            hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
-            receipt=self.network_instance.eth.wait_for_transaction_receipt(hash)
+            current_approval=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
+            if current_approval<size_formatted:
+                data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
+                signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
+                hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
+                receipt=self.network_instance.eth.wait_for_transaction_receipt(hash)
 
             #place
             data=self.manager_contract.functions.createLimitOrder(side_formatted,tick,size_formatted,pool_key).build_transaction({'from':self.wallet_address,'value':0,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
@@ -276,10 +278,12 @@ class client:
         else:
 
             #approve
-            data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
-            signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
-            hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
-            receipt=self.network_instance.eth.wait_for_transaction_receipt(hash)
+            current_approval=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.allowance(self.wallet_address,self.manager_address).call()
+            if current_approval<size_formatted:
+                data=self.network_instance.eth.contract(address=provided_token_address,abi=token_abi).functions.approve(self.manager_address,size_formatted).build_transaction({'from':self.wallet_address,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
+                signature=self.network_instance.eth.account.sign_transaction(data,self.wallet_key)
+                hash=self.network_instance.eth.send_raw_transaction(signature.raw_transaction)
+                receipt=self.network_instance.eth.wait_for_transaction_receipt(hash)
 
             #place
             data=self.manager_contract.functions.createScaleOrders(side_formatted,lower_tick,upper_tick,size_formatted,count,skew_formatted,pool_key).build_transaction({'from':self.wallet_address,'value':0,'nonce':self.network_instance.eth.get_transaction_count(self.wallet_address)})
