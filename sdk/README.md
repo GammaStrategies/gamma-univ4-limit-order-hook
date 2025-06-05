@@ -18,7 +18,7 @@ First, import the client and initialize it with your network and wallet:
 from gamma_books import client
 
 # Initialize client
-network_name = 'base'  # 'base' or 'unichain'
+network_name = 'base'  # 'base', 'unichain' or 'arbitrum'
 wallet_key = 'your_private_key_here'  # Your wallet private key
 me = client(network_name, wallet_key)
 ```
