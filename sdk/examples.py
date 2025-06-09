@@ -21,7 +21,7 @@ print(book)
 cumulative=False
 me.plot_book(book,cumulative)
 
-#place order
+#place limit order
 pool_id='0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
 invert=False #to invert pool's base token and quote token
 side='buy' #buy/sell
@@ -29,9 +29,9 @@ range=me.get_extreme_prices(pool_id,invert,side) #get order's valid price range
 print(range)
 size=15 #order's size in provided token
 price=2000 #order's execution price
-receipt=me.place_order(pool_id,invert,side,size,price)
+receipt=me.place_limit_order(pool_id,invert,side,size,price)
 
-#place orders
+#place limit orders
 pool_id='0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
 invert=False #to invert pool's base token and quote token
 side='buy' #buy/sell
@@ -44,7 +44,15 @@ range=me.get_extreme_counts(pool_id,lower_price,upper_price) #get orders' valid 
 print(range)
 count=10 #number of orders
 skew=2 #size ratio between upper order and lower order
-receipt=me.place_orders(pool_id,invert,side,size,lower_price,upper_price,count,skew)
+receipt=me.place_limit_orders(pool_id,invert,side,size,lower_price,upper_price,count,skew)
+
+#place market order
+pool_id='0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
+invert=False #to invert pool's base token and quote token
+side='buy' #buy/sell
+size=20 #orders' total size in provided token
+slippage=0.01 #order's maximum allowed slippage
+receipt=me.place_market_order(pool_id,invert,side,size,slippage)
 
 #get orders
 orders=me.get_orders()
