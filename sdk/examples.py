@@ -1,9 +1,21 @@
 #pip install gamma-books
 from gamma_books import client
+import json
+import os
+
+#load config
+config_path = os.path.join(os.path.dirname(__file__), 'config.json')
+try:
+    with open(config_path, 'r') as f:
+        config = json.load(f)
+except FileNotFoundError:
+    print(f"Config file not found at {config_path}")
+    print("Please copy config.json.example to config.json and update with your values")
+    exit(1)
 
 #connect wallet
-network_name='base' #base/unichain/arbitrum
-wallet_key='xxx' #your wallet private key
+network_name = 'base'  #base/unichain/arbitrum
+wallet_key = config['wallet_key']  #your wallet private key
 me=client(network_name,wallet_key)
 
 #get pools
@@ -38,11 +50,11 @@ side='buy' #buy/sell
 range=me.get_extreme_prices(pool_id,invert,side) #get orders' valid price range
 print(range)
 size=20 #orders' total size in provided token
-lower_price=1000 #lower order's execution price
-upper_price=2000 #upper order's execution price
+lower_price=2484.959 #lower order's execution price
+upper_price=2497.415 #upper order's execution price
 range=me.get_extreme_counts(pool_id,lower_price,upper_price) #get orders' valid count range
 print(range)
-count=10 #number of orders
+count=6 #number of orders
 skew=2 #size ratio between upper order and lower order
 receipt=me.place_limit_orders(pool_id,invert,side,size,lower_price,upper_price,count,skew)
 
@@ -50,7 +62,7 @@ receipt=me.place_limit_orders(pool_id,invert,side,size,lower_price,upper_price,c
 pool_id='0xc58b1cb202c4650f52cbc51193783cb0c245419028bfe1bb00b786a9e0187372'
 invert=False #to invert pool's base token and quote token
 side='buy' #buy/sell
-size=20 #orders' total size in provided token
+size=10 #orders' total size in provided token
 slippage=0.01 #order's maximum allowed slippage
 receipt=me.place_market_order(pool_id,invert,side,size,slippage)
 
